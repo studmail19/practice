@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YOLOv11 Skateboarder Detection</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h1>YOLOv11 Skateboarder Detection</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="file" class="form-label">Upload an image or video</label>
+      <input class="form-control" type="file" name="file" id="file" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Upload and Process</button>
+  </form>
+  
+  <br>
+  
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if result_image %}
+    <h3>Image Result:</h3>
+    <img src="{{ url_for('static', filename=result_image) }}" alt="Processed image" class="img-fluid">
+  {% endif %}
+
+  {% if result_video %}
+    <h3>Video Result:</h3>
+    <video width="640" height="480" controls>
+      <source src="{{ url_for('static', filename=result_video) }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  {% endif %}
+
+  <hr>
+  <h3>Upload History</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Filename</th>
+        <th>Average Detections per Frame</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in history %}
+      <tr>
+        <td>{{ item.filename }}</td>
+        <td>{{ item.detections }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
